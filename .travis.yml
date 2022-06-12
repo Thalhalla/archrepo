@@ -7,7 +7,7 @@ env:
 
 install:
   #- cat dockerfile | envsubst | docker build -t $TRAVIS_REPO_SLUG -
-  - docker build -t $TRAVIS_REPO_SLUG .
+  - docker build -t thalhalla/archrepo .
     #- docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name $TRAVIS_REPO_SLUG $TRAVIS_REPO_SLUG bash
   - docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name thalhallaarchrepo thalhalla/archrepo bash
 
