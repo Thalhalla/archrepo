@@ -8,7 +8,6 @@ COPY ./.ci/docker-glibc-workaround.sh /docker-glibc-workaround.sh
 
 RUN gpg-agent --daemon \
 && pacman-key --init \
-&& pacman -Sy \
 && sh /docker-glibc-workaround.sh \
 && pacman -Syu --needed --noconfirm base-devel git \
 && yes y | pacman -Scc --noconfirm \
