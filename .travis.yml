@@ -1,0 +1,25 @@
+os: linux
+dist: bionic
+language: shell
+
+env:
+  - TRAVIS_TAG=repository
+
+install:
+  #- cat dockerfile | envsubst | docker build -t $TRAVIS_REPO_SLUG -
+  docker build -t $TRAVIS_REPO_SLUG .
+  - docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name archrepo $TRAVIS_REPO_SLUG bash
+
+script:
+  - docker exec aurci sudo chown -R pkguser:pkguser .
+  - docker exec aurci bash build.sh
+
+deploy:
+  provider: releases
+  token: $GITHUB_TOKEN
+  file: pkguser/$TRAVIS_TAG/*{db,files,gz,zst}
+  file_glob: true
+  skip_cleanup: true
+  overwrite: true
+  on:
+    branch: master
