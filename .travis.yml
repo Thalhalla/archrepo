@@ -7,12 +7,13 @@ env:
 
 install:
   #- cat dockerfile | envsubst | docker build -t $TRAVIS_REPO_SLUG -
-  docker build -t $TRAVIS_REPO_SLUG .
-  - docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name archrepo $TRAVIS_REPO_SLUG bash
+  - docker build -t $TRAVIS_REPO_SLUG .
+    #- docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name $TRAVIS_REPO_SLUG $TRAVIS_REPO_SLUG bash
+  - docker run -d -t -v $(pwd)/pkguser:/home/pkguser --name thalhallaarchrepo thalhalla/archrepo bash
 
 script:
-  - docker exec aurci sudo chown -R pkguser:pkguser .
-  - docker exec aurci bash build.sh
+  - docker exec $TRAVIS_REPO_SLUG sudo chown -R pkguser:pkguser .
+  - docker exec $TRAVIS_REPO_SLUG bash build.sh
 
 deploy:
   provider: releases
