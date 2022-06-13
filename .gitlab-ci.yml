@@ -9,5 +9,6 @@ before_script:
 build:
   stage: build
   script:
-    - docker run -d -t -v $(pwd)/pkguser:/home/pkguser thalhalla/archbuilder bash -c "ls -alh"
-    - docker run -d -t -v $(pwd)/pkguser:/home/pkguser thalhalla/archbuilder bash ./build.sh
+    - docker run -t -v $(pwd)/pkguser:/home/pkguser thalhalla/archbuilder bash ./build.sh
+    - docker run -t -v $(pwd)/pkguser:/home/pkguser thalhalla/archbuilder bash -c "ls -alh"
+    - ls -alh pkguser
