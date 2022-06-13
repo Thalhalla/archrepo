@@ -1,18 +1,3 @@
 #!/bin/bash
 
-if [[ -z ${TRAVIS_REPO_SLUG}  ]]
-then 
-  echo 'TRAVIS_REPO_SLUG <-- needs to be set'
-  exit 1
-fi
-if [[ -z ${TRAVIS_TAG}  ]]
-then 
-  echo 'TRAVIS_TAG <-- needs to be set'
-  exit 1
-fi
-
-time docker build \
-  --build-arg TRAVIS_REPO_SLUG \
-  --build-arg TRAVIS_BUILD_ID \
-  --build-arg TRAVIS_TAG \
-  -t test .
+docker run -t -v $(pwd)/pkguser:/home/pkguser thalhalla/archbuilder bash ./build.sh

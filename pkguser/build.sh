@@ -2,10 +2,12 @@
 
 set -ex
 
-export PKGDEST=$(pwd)"/${TRAVIS_TAG}"
+#export PKGDEST=$(pwd)"/${TRAVIS_TAG}"
+export PKGDEST=$(pwd)"/archrepo"
 
 if ! grep -qs "PACKAGER" ".makepkg.conf"; then
-    export PACKAGER="${TRAVIS_REPO_SLUG/\// } <${TRAVIS_BUILD_ID}@travis.build.id>"
+    #export PACKAGER="${TRAVIS_REPO_SLUG/\// } <${TRAVIS_BUILD_ID}@travis.build.id>"
+    export PACKAGER="archrepo/\// } <100@travis.build.id>"
 fi
 
 declare -a pkgkeys=()
@@ -19,10 +21,12 @@ mapfile -t pkgkeys < "gpgkey.lst"
 mapfile -t pkgnames < "package.lst"
 
 for pkgkey in "${pkgkeys[@]}"; do
-    gpg --recv-keys --keyserver "hkp://ipv4.pool.sks-keyservers.net" "${pkgkey}"
+    #gpg --recv-keys --keyserver "hkp://ipv4.pool.sks-keyservers.net" "${pkgkey}"
+    gpg --recv-keys "${pkgkey}"
 done
 
-mkdir "${TRAVIS_TAG}"
+#mkdir "${TRAVIS_TAG}"
+mkdir -p archrepo
 
 shopt -s nullglob
 for pkghook in "hooks/"*"-pre-"*".sh"; do
@@ -31,6 +35,12 @@ done
 shopt -u nullglob
 
 if (( ${#pkgnames[@]} )); then
+    #aur sync -d "${TRAVIS_REPO_SLUG#*/}" -n ${pkgnames[@]}
+    pwd
+    ls -alh
+    ls -alh archrepo
+    #aur sync -d "archrepo#*/}" -n ${pkgnames[@]}
+    TRAVIS_REPO_SLUG=archrepo
     aur sync -d "${TRAVIS_REPO_SLUG#*/}" -n ${pkgnames[@]}
 fi
 
